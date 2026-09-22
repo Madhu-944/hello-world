@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Archi – SQL Wrapper</title>
+  <link rel="stylesheet" href="../css/model.css">
+  <link rel="stylesheet" href="./report.css">
+  <link rel="stylesheet" href="../lib/bootstrap/css/bootstrap.min.yeti.css">
+</head>
+
+<body>
+
+
+ <div style="margin: 10px;">
+ 	<div class="ui-layout-north">
+		<nav class="navbar">
+			<div class="navbar-header">
+				<span class="navbar-brand" style="font-weight: bold;">Canon Medical Systems Europe - Enterprise model</span>
+			</div>
+			<div class="collapse navbar-collapse">
+				<ul class="nav navbar-nav navbar-right">
+					<li><a href="./report.html" data-toggle="modal" class="go">reports<span class="i18n-about"></span></a></li>
+				</ul>
+			</div>
+		</nav>
+	</div>
+ 
+  <h1>Search element in views</h1>
+
+  <!-- AlaSQL / Archi prompt -->
+  <!--<PRE id="myprompt" style="margin-bottom:12px;"> -->
+  <PRE id="myprompt" style="display:none;">
+SELECT
+    E.name AS ElementName,
+    E.documentation,
+	V.name viewname,
+    concat('https://portalprod2019.cmse.network/_layouts/15/archi/archi/864cf342-b6f8-4592-98f7-860f53dd7d86/views/',
+    V.id,
+    '.html') url
+FROM Elements E,
+     ViewsContent VO,
+     Views V
+WHERE E.id = VO.contentid
+  AND VO.viewid = V.id
+  AND E.type IN ('ApplicationComponent','ApplicationInterface','ApplicationService','BusinessObject')
+ORDER BY E.name, V.name
+  </PRE>
+  
+  
+  <input id="useid" type="text" style="display:none;" />
+  <pre id="myconsole" style="display:none;"></pre>
+
+
+  <!-- Output frame -->
+  <div style="display:flex; align-items:center; margin:8px 0;">
+    <div id="resultMeta" style="font-size:12px; color:#444;"></div>
+    <div id="sqlToggleRow" style="margin-left:8px; font-size:11px; color:#666; display:none;"><a href="#" id="toggleSql">show SQL</a></div>
+  </div>
+
+  <div style="display:flex; gap:8px; align-items:center; margin:8px 0;">
+    <input id="filter" type="text" placeholder="Filter rows (type to search…)"
+         style="flex:1; padding:6px 8px;">
+    <select id="pageSize" style="padding:6px 8px;">
+      <option selected>10</option>
+      <option>25</option>
+      <option>50</option>
+      <option>100</option>
+      <option>250</option>
+    </select>
+    <button id="prev">◀</button>
+    <span id="pageInfo" style="min-width:120px; text-align:center;"></span>
+    <button id="next">▶</button>
+  </div>
+
+  <div style="overflow:auto; border:1px solid #ddd; border-radius:6px;">
+    <!-- Change the table class to highlight grouping on the first column -->
+    <table class="group-on-first-column group-soft" id="resultTable" style="border-collapse: collapse; width:100%; font-size: 13px;">
+    <!-- <table id="resultTable" style="border-collapse: collapse; width:100%; font-size: 13px;">-->
+      <thead id="resultHead"></thead>
+      <tbody id="resultBody"></tbody>
+    </table>
+  </div>
+
+<table c>
+
+  <pre id="errorBox" style="display:none; background:#111; color:#eee; padding:8px; border-radius:6px; margin-top:10px;"></pre>
+
+ </div>
+ 
+  <!-- AlaSQL FIRST -->
+  <script src="../lib/alasql/alasql.min.js"></script>
+
+  <!-- Then the Archi-generated script -->
+  <script src="render-model.js"></script>
+
+  <!-- Only now run SQL -->
+  <script src="./report.js"></script>
+  
+</body>
+</html>
